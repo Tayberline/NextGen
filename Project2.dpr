@@ -9,7 +9,9 @@ uses
   UProductCatalog in 'model\UProductCatalog.pas',
   UProductDescription in 'model\UProductDescription.pas',
   URegister in 'model\URegister.pas',
-  USale in 'model\USale.pas';
+  USale in 'model\USale.pas',
+  USalesLineItem in 'model\USalesLineItem.pas',
+  UDate in 'model\UDate.pas';
 
 {$R *.res}
 
