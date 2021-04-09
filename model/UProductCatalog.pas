@@ -29,9 +29,9 @@ begin
   id1:=ItemID.Create(100);
   id2:=ItemID.Create(200);
   price:=Money.Create(3);
-  desc:=ProductDescription.Create(id1, price, '?????1');
+  desc:=ProductDescription.Create(id1, price, 'Tovar1');
   descriptions.Add(id1, desc);
-  desc:=ProductDescription.Create(id2, price, '?????2');
+  desc:=ProductDescription.Create(id2, price, 'Tovar2');
   descriptions.Add(id2, desc);
 
 end;

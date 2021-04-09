@@ -4,7 +4,12 @@ uses
   Vcl.Forms,
   Unit2 in 'Unit2.pas' {Form2},
   UPayment in 'model\UPayment.pas',
-  UMoney in 'model\UMoney.pas';
+  UMoney in 'model\UMoney.pas',
+  UitemID in 'model\UitemID.pas',
+  UProductCatalog in 'model\UProductCatalog.pas',
+  UProductDescription in 'model\UProductDescription.pas',
+  URegister in 'model\URegister.pas',
+  USale in 'model\USale.pas';
 
 {$R *.res}
 
