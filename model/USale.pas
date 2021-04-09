@@ -43,7 +43,7 @@ var
 begin
   total := Money.Create(0);
   subtotal := Money.Create(0);
-  for lineItems in lineItem do
+  for lineItem in lineItems do
   begin
     subtotal := lineItem.getSubtotal();
     total.add(subtotal);
