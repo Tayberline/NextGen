@@ -2,63 +2,69 @@ unit USale;
 
 interface
 
-uses System.SysUtils, System.Generics.Defaults,
-  System.Generics.Collections, System.Types,
-  UProductDescription, UMoney, USalesLineItem, UDate, UPayment;
+uses System.SysUtils, System.Generics.Defaults, System.Generics.Collections,
+  System.Types, UProductDescription, UMoney, USalesLineItem, UDate, UPayment;
 
 type
-  Sale = class
-  private
-    lineItems: Tlist<SalesLineItem>;
-    date: date;
-    isCompleate: boolean;
-    payment: payment;
-  public
-    function getBalance(): Money;
-    function getTotal(): Money;
+  ISale = interface
+    function getBalance(): IMoney;
+    function getTotal(): IMoney;
     procedure becomeComplete();
-    procedure makeLineItem(desc: ProductDescription; quantity: integer);
-    procedure makePayment(cashTendered: Money);
+    procedure makeLineItem(desc: IProductDescription; quantity: integer);
+    procedure makePayment(cashTendered: IMoney);
+  end;
+
+  TSale = class(TInterfacedObject, ISale)
+  private
+    LineItems: TList<ISalesLineItem>;
+    date: TDate;
+    isComplete: boolean;
+    /// <link>aggregation</link>
+    payment: IPayment;
+  public
+    function getBalance(): IMoney;
+    function getTotal(): IMoney;
+    procedure becomeComplete();
+    procedure makeLineItem(desc: IProductDescription; quantity: integer);
+    procedure makePayment(cashTendered: IMoney);
   end;
 
 implementation
 
 { Sale }
 
-procedure Sale.becomeComplete;
+procedure TSale.becomeComplete;
 begin
-  isCompleate := true;
+  isComplete := true;
 end;
 
-function Sale.getBalance: Money;
+function TSale.getBalance: IMoney;
 begin
   result := payment.getAmount().minus(getTotal());
 end;
 
-function Sale.getTotal(): Money;
+function TSale.getTotal: IMoney;
 var
-  total: Money;
-  subtotal: Money;
-  lineItem: SalesLineItem;
+  total, subtotal: IMoney;
+  lineItem: ISalesLineItem;
 begin
-  total := Money.Create(0);
-  subtotal := Money.Create(0);
-  for lineItem in lineItems do
+  total := TMoney.Create(0);
+  subtotal := TMoney.Create(0);
+  for lineItem in LineItems do
   begin
-    subtotal := lineItem.getSubtotal();
+    subtotal := lineItem.getSubTotal();
     total.add(subtotal);
   end;
-  result := total;
 end;
 
-procedure Sale.makeLineItem(desc: ProductDescription; quantity: integer);
+procedure TSale.makeLineItem(desc: IProductDescription; quantity: integer);
 begin
-  lineItems.add(SalesLineItem.Create(desc, quantity))
+  LineItems.add(TSalesLineItem.Create(desc, quantity));
 end;
 
-procedure Sale.makePayment(cashTendered: Money);
+procedure TSale.makePayment(cashTendered: IMoney);
 begin
-  payment := payment.Create(cashTendered);
+  payment := TPayment.Create(cashTendered);
 end;
 
 end.

@@ -1,13 +1,10 @@
 unit UDate;
 
 interface
+ type
+ TDate=class
 
-type
-
-  Date = class
-
-  end;
-
+ end;
 implementation
 
 end.

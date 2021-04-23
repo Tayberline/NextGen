@@ -1,48 +1,56 @@
 unit URegister;
 
 interface
+  uses UItemID, UProductCatalog, USale, UMoney, UProductDescription;
+type
+  IRegicter = interface
+      procedure endSale();
+      procedure enterItem(id: TItemID; quantity: integer);
+      procedure makeNewSale();
+      procedure makePayment(cashTendered: IMoney);
+    end;
 
-uses UItemID, UProductCatalog, USale, UMoney, UProductDescription;
+    TRegicter = class(TInterfacedObject, IRegicter)
+    private
+      /// <link>aggregation</link>
+      catalog: IProductCatalog;
+      /// <link>aggregation</link>
+      currentSale: ISale;
+    public
+      procedure endSale();
+      procedure enterItem(id: TItemID; quantity: integer);
+      procedure makeNewSale();
+      procedure makePayment(cashTendered: IMoney);
+      constructor Create(catalog: IProductCatalog);
+    end;
 
- type
- Regicter = class
- private
-   catalog:ProductCatalog;
-   currentSale:Sale;
- public
-   procedure endSale();
-   procedure enterItem(id:ItemID; quantity:integer);
-   procedure makeNewSale();
-   procedure makePayment(cashTendered:Money);
-   constructor Create(catalog:ProductCatalog);
- end;
-implementation
+  implementation
 
 { Regicter }
 
-constructor Regicter.Create(catalog: ProductCatalog);
+constructor TRegicter.Create(catalog: IProductCatalog);
 begin
   Self.catalog:=catalog;
 end;
 
-procedure Regicter.endSale;
+procedure TRegicter.endSale;
 begin
   currentSale.becomeComplete();
 end;
 
-procedure Regicter.enterItem(id: ItemID; quantity: integer);
-var desc:ProductDescription;
+procedure TRegicter.enterItem(id: TItemID; quantity: integer);
+var desc:IProductDescription;
 begin
   desc:=catalog.getProductDescription(id);
-  currentSale.makeLineItem(desc, quantity);
+  currentSale.makeLineItem(desc,quantity);
 end;
 
-procedure Regicter.makeNewSale;
+procedure TRegicter.makeNewSale;
 begin
-  currentSale:=Sale.Create;
+  currentSale:=TSale.Create;
 end;
 
-procedure Regicter.makePayment(cashTendered: Money);
+procedure TRegicter.makePayment(cashTendered: IMoney);
 begin
   currentSale.makePayment(cashTendered);
 end;
