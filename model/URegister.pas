@@ -1,36 +1,39 @@
 unit URegister;
 
 interface
-  uses UItemID, UProductCatalog, USale, UMoney, UProductDescription;
+
+uses UItemID, UProductCatalog, USale, UMoney, UProductDescription;
+
 type
   IRegicter = interface
-      procedure endSale();
-      procedure enterItem(id: TItemID; quantity: integer);
-      procedure makeNewSale();
-      procedure makePayment(cashTendered: IMoney);
-    end;
+    procedure endSale();
+    procedure enterItem(id: TItemID; quantity: integer);
+    procedure makeNewSale();
+    procedure makePayment(cashTendered: IMoney);
+  end;
 
-    TRegicter = class(TInterfacedObject, IRegicter)
-    private
-      /// <link>aggregation</link>
-      catalog: IProductCatalog;
-      /// <link>aggregation</link>
-      currentSale: ISale;
-    public
-      procedure endSale();
-      procedure enterItem(id: TItemID; quantity: integer);
-      procedure makeNewSale();
-      procedure makePayment(cashTendered: IMoney);
-      constructor Create(catalog: IProductCatalog);
-    end;
+  TRegicter = class(TInterfacedObject, IRegicter)
+  private
+    /// <link>aggregation</link>
+    catalog: IProductCatalog;
+    /// <link>aggregation</link>
+    currentSale: ISale;
+  public
+    procedure endSale();
+    procedure enterItem(id: TItemID; quantity: integer);
+    procedure makeNewSale();
+    procedure makePayment(cashTendered: IMoney);
+    constructor Create(catalog: IProductCatalog);
+  end;
 
-  implementation
+implementation
 
 { Regicter }
 
 constructor TRegicter.Create(catalog: IProductCatalog);
 begin
-  Self.catalog:=catalog;
+  catalog := TProductCatalog.Create;
+  Self.catalog := catalog;
 end;
 
 procedure TRegicter.endSale;
@@ -39,15 +42,16 @@ begin
 end;
 
 procedure TRegicter.enterItem(id: TItemID; quantity: integer);
-var desc:IProductDescription;
+var
+  desc: IProductDescription;
 begin
-  desc:=catalog.getProductDescription(id);
-  currentSale.makeLineItem(desc,quantity);
+  desc := catalog.getProductDescription(id);
+  currentSale.makeLineItem(desc, quantity);
 end;
 
 procedure TRegicter.makeNewSale;
 begin
-  currentSale:=TSale.Create;
+  currentSale := TSale.Create;
 end;
 
 procedure TRegicter.makePayment(cashTendered: IMoney);

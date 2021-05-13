@@ -18,7 +18,6 @@ type
   private
     /// <link>aggregation</link>
     fasad: IFasad;
-
     { Private declarations }
   public
 
@@ -40,8 +39,7 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   fasad := TFasad.Create();
-       fasad.getStore();
-
+  fasad.getStore;
 end;
 
 end.

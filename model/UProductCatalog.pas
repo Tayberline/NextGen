@@ -29,6 +29,7 @@ var
   price: IMoney;
   desc: IProductDescription;
 begin
+  descriptions:=TDictionary<TItemID, IProductDescription>.create;;
   id1 := TItemID.Create(100);
   id2 := TItemID.Create(200);
   price := TMoney.Create(3);
